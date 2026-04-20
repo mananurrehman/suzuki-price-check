@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Price Entry App</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&display=swap');
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: linear-gradient(135deg, #111827, #020617);
+    min-height: 100vh;
+  }
+
+  /* Fix dropdown option colors */
+  select option {
+    background-color: #111827;
+    color: #f3f4f6;
+  }
+
+  select {
+    color: #f3f4f6;
+  }
+
+  select.placeholder-shown,
+  select option[value=""] {
+    color: #9ca3af;
+  }
+
+  input::placeholder {
+    color: #6b7280;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #1f2937; }
+  ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 3px; }
+
+  /* Table scroll on mobile */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    display: block;
+  }
+
+  .table-wrapper::-webkit-scrollbar {
+    height: 4px;
+  }
+  .table-wrapper::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+  }
+  .table-wrapper::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+  }
+
+  .input-field {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #f3f4f6;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 14px;
+    width: 100%;
+    outline: none;
+    transition: border 0.2s, background 0.2s;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .input-field:focus {
+    border-color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.09);
+  }
+
+  .input-valid {
+    border: 2px solid #22c55e !important;
+    background: rgba(34,197,94,0.1) !important;
+  }
+
+  .input-invalid {
+    border: 2px solid #ef4444 !important;
+    background: rgba(239,68,68,0.1) !important;
+  }
+</style>
+</head>
+
+<body class="p-4 sm:p-6 lg:p-10">
+
+<div class="max-w-5xl mx-auto">
+
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">🚗 Car Price Entry App</h1>
+    <p class="text-gray-400 text-sm mt-1">Pak Suzuki Vehicle Pricing Verification</p>
+  </div>
+
+  <!-- Card -->
+  <div class="rounded-2xl p-5 sm:p-7" style="background: rgba(255,255,255,0.04); backdrop-filter: blur(12px); box-shadow: 0 10px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.06);">
+
+    <!-- Form Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+
+      <!-- Dropdown — full width -->
+      <div class="sm:col-span-2">
+        <label class="block text-xs text-gray-400 mb-1 ml-1">Product</label>
+        <select id="product" class="input-field">
+          <option value="">Select Product</option>
+          <option>ALTO VXR 660 CC</option>
+          <option>ALTO VXR AGS 660 CC</option>
+          <option>ALTO VXL AGS 660 CC</option>
+          <option>CULTUS VXR 1000 CC</option>
+          <option>CULTUS VXL 1000 CC</option>
+          <option>CULTUS AGS 1000 CC</option>
+          <option>SWIFT GL VVT MT 1200 CC</option>
+          <option>SWIFT GL VVT AT 1200 CC</option>
+          <option>SWIFT GLX VVT 1200 CC</option>
+          <option>EVERY VXR 660 CC</option>
+        </select>
+      </div>
+
+      <!-- Ex-Factory — full width -->
+      <div class="sm:col-span-2">
+        <label class="block text-xs text-gray-400 mb-1 ml-1">Ex-Factory Price</label>
+        <input type="number" id="exfactory" placeholder="Ex-Factory Price" class="input-field">
+      </div>
+
+      <!-- Filer -->
+      <div>
+        <label class="block text-xs text-gray-400 mb-1 ml-1">Filer Tax</label>
+        <input type="number" id="filerTax" placeholder="Filer Tax" class="input-field">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-400 mb-1 ml-1">Filer Price</label>
+        <input type="number" id="filerPrice" placeholder="Filer Price" class="input-field">
+      </div>
+
+      <!-- Non-Filer -->
+      <div>
+        <label class="block text-xs text-gray-400 mb-1 ml-1">Non-Filer Tax</label>
+        <input type="number" id="nonfilerTax" placeholder="Non-Filer Tax" class="input-field">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-400 mb-1 ml-1">Non-Filer Price</label>
+        <input type="number" id="nonfilerPrice" placeholder="Non-Filer Price" class="input-field">
+      </div>
+
+    </div>
+
+    <!-- Add Button -->
+    <button onclick="addData()"
+      class="w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-200"
+      style="background: #374151;"
+      onmouseover="this.style.background='#4b5563'"
+      onmouseout="this.style.background='#374151'">
+      ➕ Add Entry
+    </button>
+
+    <!-- Scroll hint for mobile -->
+    <p class="text-xs text-gray-500 mt-6 mb-2 sm:hidden text-right">← Scroll sideways to see all →</p>
+
+    <!-- Table -->
+    <div class="table-wrapper rounded-xl" style="border: 1px solid rgba(255,255,255,0.06);">
+      <table class="border-collapse text-sm text-center" style="min-width: 640px; width: 100%;">
+        <thead>
+          <tr style="background: rgba(255,255,255,0.08);">
+            <th class="px-3 py-3 text-gray-300 font-semibold whitespace-nowrap">Product</th>
+            <th class="px-3 py-3 text-gray-300 font-semibold whitespace-nowrap">Ex-Factory</th>
+            <th class="px-3 py-3 text-gray-300 font-semibold whitespace-nowrap">Filer Tax</th>
+            <th class="px-3 py-3 text-gray-300 font-semibold whitespace-nowrap">Filer Price</th>
+            <th class="px-3 py-3 text-gray-300 font-semibold whitespace-nowrap">Non-Filer Tax</th>
+            <th class="px-3 py-3 text-gray-300 font-semibold whitespace-nowrap">Non-Filer Price</th>
+            <th class="px-3 py-3 text-gray-300 font-semibold whitespace-nowrap">Status</th>
+            <th class="px-3 py-3 text-gray-300 font-semibold whitespace-nowrap">Action</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+
+      <!-- Empty state -->
+      <div id="emptyState" class="text-center py-10 text-gray-500 text-sm">
+        No entries yet. Add your first record above.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const priceDB = {
+  "ALTO VXR 660 CC": { exfactory: 2994861, filerTax: 14974, filerPrice: 3009835, nonfilerTax: 44923, nonfilerPrice: 3039784 },
+  "ALTO VXR AGS 660 CC": { exfactory: 3166480, filerTax: 15832, filerPrice: 3182312, nonfilerTax: 47497, nonfilerPrice: 3213977 },
+  "ALTO VXL AGS 660 CC": { exfactory: 3326446, filerTax: 16632, filerPrice: 3343078, nonfilerTax: 49897, nonfilerPrice: 3376343 },
+  "CULTUS VXR 1000 CC": { exfactory: 4089490, filerTax: 40895, filerPrice: 4130385, nonfilerTax: 122685, nonfilerPrice: 4212175 },
+  "CULTUS VXL 1000 CC": { exfactory: 4359160, filerTax: 43592, filerPrice: 4402752, nonfilerTax: 130775, nonfilerPrice: 4489935 },
+  "CULTUS AGS 1000 CC": { exfactory: 4591460, filerTax: 45915, filerPrice: 4637375, nonfilerTax: 137744, nonfilerPrice: 4732204 },
+  "SWIFT GL VVT MT 1200 CC": { exfactory: 4460160, filerTax: 66902, filerPrice: 4527062, nonfilerTax: 200707, nonfilerPrice: 4660867 },
+  "SWIFT GL VVT AT 1200 CC": { exfactory: 4605600, filerTax: 69084, filerPrice: 4674684, nonfilerTax: 207252, nonfilerPrice: 4812852 },
+  "SWIFT GLX VVT 1200 CC": { exfactory: 4766190, filerTax: 71493, filerPrice: 4837683, nonfilerTax: 214479, nonfilerPrice: 4980669 },
+  "EVERY VXR 660 CC": { exfactory: 2965200, filerTax: 14826, filerPrice: 2980026, nonfilerTax: 44478, nonfilerPrice: 3009678 }
+};
+
+let data = [];
+renderTable();
+
+function addData() {
+    let product = document.getElementById("product").value;
+    let exfactory = document.getElementById("exfactory").value;
+    let filerTax = document.getElementById("filerTax").value;
+    let filerPrice = document.getElementById("filerPrice").value;
+    let nonfilerTax = document.getElementById("nonfilerTax").value;
+    let nonfilerPrice = document.getElementById("nonfilerPrice").value;
+
+    if (!product || !exfactory || !filerTax || !filerPrice || !nonfilerTax || !nonfilerPrice) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    // Check each field against DB and store validation result
+    const fields = ["exfactory","filerTax","filerPrice","nonfilerTax","nonfilerPrice"];
+    const values = { exfactory, filerTax, filerPrice, nonfilerTax, nonfilerPrice };
+    let validation = {};
+
+    if (priceDB[product]) {
+        fields.forEach(field => {
+            validation[field] = Number(values[field]) === priceDB[product][field] ? "correct" : "wrong";
+        });
+    } else {
+        fields.forEach(field => { validation[field] = "unknown"; });
+    }
+
+    data.push({ product, exfactory, filerTax, filerPrice, nonfilerTax, nonfilerPrice, validation });
+    renderTable();
+    clearInputs();
+}
+
+function cellStyle(validation, field) {
+    if (!validation || validation[field] === "unknown") return 'class="px-3 py-3 text-gray-300"';
+    if (validation[field] === "correct") return 'class="px-3 py-3 font-semibold" style="color:#4ade80; background:rgba(34,197,94,0.08);"';
+    return 'class="px-3 py-3 font-semibold" style="color:#f87171; background:rgba(239,68,68,0.08);"';
+}
+
+function renderTable() {
+    let tbody = document.getElementById("tableBody");
+    let empty = document.getElementById("emptyState");
+
+    if (data.length === 0) {
+        tbody.innerHTML = "";
+        empty.style.display = "block";
+        return;
+    }
+
+    empty.style.display = "none";
+    const fields = ["exfactory","filerTax","filerPrice","nonfilerTax","nonfilerPrice"];
+
+    tbody.innerHTML = data.map((item, index) => {
+        const v = item.validation;
+        const allCorrect = v && fields.every(f => v[f] === "correct");
+        const hasWrong   = v && fields.some(f => v[f] === "wrong");
+
+        const statusCell = allCorrect
+            ? `<td class="px-3 py-3 text-center"><span title="All values correct" style="font-size:18px;">&#x2705;</span></td>`
+            : hasWrong
+                ? `<td class="px-3 py-3 text-center"><span title="One or more values incorrect" style="font-size:18px;">&#x274C;</span></td>`
+                : `<td class="px-3 py-3 text-center"><span class="text-gray-500 text-xs">&#8212;</span></td>`;
+
+        const actionCell = allCorrect
+            ? `<td class="px-3 py-3"></td>`
+            : `<td class="px-3 py-3"><button onclick="deleteRow(${index})"
+                class="px-3 py-1 rounded-lg text-xs font-semibold text-red-300 transition-all"
+                style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.2);"
+                onmouseover="this.style.background='rgba(239,68,68,0.25)'"
+                onmouseout="this.style.background='rgba(239,68,68,0.12)'">&#x274C; Delete</button></td>`;
+
+        return `<tr class="border-t border-white/5 hover:bg-white/5 transition-colors">
+            <td class="px-3 py-3 text-gray-200 text-left whitespace-nowrap">${item.product}</td>
+            <td ${cellStyle(v, "exfactory")}>${Number(item.exfactory).toLocaleString()}</td>
+            <td ${cellStyle(v, "filerTax")}>${Number(item.filerTax).toLocaleString()}</td>
+            <td ${cellStyle(v, "filerPrice")}>${Number(item.filerPrice).toLocaleString()}</td>
+            <td ${cellStyle(v, "nonfilerTax")}>${Number(item.nonfilerTax).toLocaleString()}</td>
+            <td ${cellStyle(v, "nonfilerPrice")}>${Number(item.nonfilerPrice).toLocaleString()}</td>
+            ${statusCell}
+            ${actionCell}
+        </tr>`;
+    }).join("");
+}
+
+function deleteRow(index) {
+    data.splice(index, 1);
+    renderTable();
+}
+
+function clearInputs() {
+    document.getElementById("product").value = "";
+    ["exfactory","filerTax","filerPrice","nonfilerTax","nonfilerPrice"].forEach(id => {
+        let el = document.getElementById(id);
+        el.value = "";
+        el.classList.remove("input-valid", "input-invalid");
+    });
+}
+</script>
+
+</body>
+</html>
